@@ -86,7 +86,11 @@ root@node02ans:~# curl -X GET http://serverip:port/results
    }
  ]
 }
+
+
 ![10](attach/10.PNG)
+
+
 ---
 
 Скриншоты Jenkins Pipeline:
