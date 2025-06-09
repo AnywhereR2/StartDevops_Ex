@@ -35,11 +35,10 @@ ckerhub-creds
 deployip
 deploy-key
 Secret file .env (envfile)
-
-
 8. Запустить Master_job
 
 ---
+
 Как работает CI/CD:
 
 
@@ -53,9 +52,7 @@ Lint - Проверяет качество Python-кода (flake8)
 Push -  Публикует Docker-образ на DockerHub
 Cleanup - Удаляет контейнер и файлы
 
-
 02_CD
-
 
 Install Docker & Compose -  Установка Docker и Docker Compose на удалённый сервер
 Install Git -   Установка Git на удалённом сервере
@@ -64,9 +61,9 @@ Upload .env -   Передача файла окружения .env
 Run docker-compose - Запуск  контейнеров
 Health Check - Проверка  на /ping
 
-
-Master_job
+Master_job 
 Запуск pipeline 01_CI потом 02_CD
+
 ---
 Примеры API-запросов:
 
