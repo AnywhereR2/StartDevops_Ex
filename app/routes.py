@@ -2,6 +2,7 @@ from flask import request, Response, jsonify
 from .models import fetch_all_results, insert_result
 import json
 
+
 def register_routes(app):
     @app.route('/ping')
     def ping():
@@ -29,6 +30,7 @@ def register_routes(app):
     @app.errorhandler(404)
     def not_found(error):
         return _resp(404, {"error": "Bad endpoint"})
+
 
 def _resp(code, data, indent=None):
     return Response(
