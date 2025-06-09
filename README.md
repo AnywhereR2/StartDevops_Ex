@@ -64,20 +64,27 @@ Health Check - Проверка  на /ping
 Master_job 
 Запуск pipeline 01_CI потом 02_CD
 
+
 ---
+
+Ендпоинт в формате <IP-VM>:<PORT>/results  -  37.9.53.40:10101/results
+
+---
+
+
 Примеры API-запросов:
 
-root@node02ans:~# curl http://serverip:port/ping
+root@node02ans:~# curl http://37.9.53.40:10101/ping
 ```
 {"status":"ok"}
 ```
 
-root@node02ans:~# curl -X POST http://serverip:port/submit -H "Content-Type: application/json" -d '{"name": "Anton", "score": 50}'
+root@node02ans:~# curl -X POST http://37.9.53.40:10101/submit -H "Content-Type: application/json" -d '{"name": "Anton", "score": 50}'
 ```
 {"message": "Saved"}
 ```
 
-root@node02ans:~# curl -X GET http://serverip:port/results
+root@node02ans:~# curl -X GET http://37.9.53.40:10101/results
 ```
 {
  "results": [
