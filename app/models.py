@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def get_connection():
     try:
         conn = psycopg.connect(
@@ -14,7 +15,7 @@ def get_connection():
             host=os.getenv("DB_HOST"),
             port=os.getenv("DB_PORT"),
             row_factory=dict_row,
-            connect_timeout = 5
+            connect_timeout=5
         )
         return conn
     except (psycopg.Error, TimeoutError, OSError) as e:
@@ -30,11 +31,12 @@ def insert_result(name, score):
             )
             conn.commit()
 
+
 def fetch_all_results():
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT id, name, score, timestamp FROM results ORDER BY timestamp DESC")
-            return cur.fetchall()  # список словарей
+            return cur.fetchall()
 
 def init_db():
     with get_connection() as conn:
