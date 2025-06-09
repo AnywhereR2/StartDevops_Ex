@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: anywhereant:latest
+    image: ${IMAGE_NAME}
     container_name: web
     ports:
       - "$FLASK_RUN_PORT:$FLASK_RUN_PORT"
