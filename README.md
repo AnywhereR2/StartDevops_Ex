@@ -25,7 +25,7 @@ credentials
 credentials-binding
 
 
-3. Корне проекта есть директория: jenkins
+3. Корне проекта есть директория: jenkins - в данной директория pipeline-ы
 4. Необходимо создать папку и настроить в ней два pipeline. Название папки - Folder name: ExamWeb
 5. Название pipeline: 01_CI и 02_CD
 ![4](attach/4.PNG)
