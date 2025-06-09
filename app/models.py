@@ -18,9 +18,11 @@ def get_connection():
             connect_timeout=5
         )
         return conn
+
     except (psycopg.Error, TimeoutError, OSError) as e:
         print("Ошибка БД", e)
         raise
+
 
 def insert_result(name, score):
     with get_connection() as conn:
@@ -37,6 +39,8 @@ def fetch_all_results():
         with conn.cursor() as cur:
             cur.execute("SELECT id, name, score, timestamp FROM results ORDER BY timestamp DESC")
             return cur.fetchall()
+        
+
 
 def init_db():
     with get_connection() as conn:
