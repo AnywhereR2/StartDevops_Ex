@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "anywherer2/anywhereant:latest"
+        CONTAINER_NAME = "test_container"
+        REGISTRY_CREDENTIALS = credentials('dockerhub-creds')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/AnywhereR2/StartDevops_Ex.git', branch: 'main'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Lint with flake8') {
+            steps {
+                script {
+                    sh "docker rm -f ${CONTAINER_NAME} || true"
+                    sh "docker run -d --name ${CONTAINER_NAME} $IMAGE_NAME tail -f /dev/null"
+                    sh "docker exec ${CONTAINER_NAME} pip install flake8"
+                    sh "docker exec ${CONTAINER_NAME} flake8 --max-line-length=120 ."
+                    sh "docker stop ${CONTAINER_NAME}"
+                    sh "docker rm ${CONTAINER_NAME}"
+                }
+            }
+        }
+
+        stage('Docker push') {
+            steps {
+                sh '''
+                    echo $REGISTRY_CREDENTIALS_PSW | docker login -u $REGISTRY_CREDENTIALS_USR --password-stdin
+                    docker push $IMAGE_NAME
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            sh "docker rm -f ${CONTAINER_NAME} || true"
+            deleteDir()
+        }
+    }
+}

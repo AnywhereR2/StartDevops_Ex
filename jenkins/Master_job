@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Run CI') {
+            steps {
+                build job: 'ExamWeb/01_CI', wait: true, propagate: true
+            }
+        }
+
+        stage('Run CD') {
+            steps {
+                build job: 'ExamWeb/02_CD', wait: true, propagate: true
+            }
+        }
+    }
+}

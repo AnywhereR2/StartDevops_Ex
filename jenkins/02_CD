@@ -1,0 +1,103 @@
+pipeline {
+    agent any
+
+    environment {
+        DEPLOY_IP = credentials('deployip')
+        APP_DIR = 'flask-api'
+        GIT_REPO = 'https://github.com/AnywhereR2/StartDevops_Ex.git'
+        IMAGE = 'anywherer2/anywhereant:latest'
+    }
+
+    stages {
+        stage('Install Docker & Compose') {
+            steps {
+                sshagent(['deploy-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@$DEPLOY_IP '
+                            if ! command -v docker &> /dev/null; then
+                                sudo apt-get update -y
+                                sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+                                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+                                echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+                                sudo apt-get update -y
+                                sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+                                sudo usermod -aG docker ubuntu
+                            fi
+                            if ! docker compose version &> /dev/null; then
+                                sudo apt-get install -y docker-compose-plugin
+                            fi
+                        '
+                    '''
+                }
+            }
+        }
+
+        stage('Install Git') {
+            steps {
+                sshagent(['deploy-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@$DEPLOY_IP '
+                            if ! command -v git &> /dev/null; then
+                                sudo apt-get update -y
+                                sudo apt-get install -y git
+                            fi
+                        '
+                    '''
+                }
+            }
+        }
+
+        stage('Clone Git Repo') {
+            steps {
+                sshagent(['deploy-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@$DEPLOY_IP '
+                            cd ~ &&
+                            rm -rf flask-api &&
+                            git clone https://github.com/AnywhereR2/StartDevops_Ex.git flask-api
+                        '
+                    '''
+                }
+            }
+        }
+
+        stage('Upload .env') {
+            steps {
+                sshagent(['deploy-key']) {
+                    withCredentials([file(credentialsId: 'envfile', variable: 'ENV_FILE')]) {
+                        sh '''
+                            scp -o StrictHostKeyChecking=no $ENV_FILE ubuntu@$DEPLOY_IP:~/flask-api/.env
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Run docker-compose') {
+            steps {
+                sshagent(['deploy-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@$DEPLOY_IP '
+                            cd ~/flask-api &&
+                            docker compose down --remove-orphans &&
+                            IMAGE_NAME='"$IMAGE"' docker compose up -d
+                        '
+                    '''
+                }
+            }
+        }
+
+        stage('Health Check') {
+    steps {
+        sshagent(['deploy-key']) {
+         sh '''
+    ssh -o StrictHostKeyChecking=no ubuntu@$DEPLOY_IP '
+        PORT=$(grep FLASK_RUN_PORT ~/flask-api/.env | cut -d "=" -f2 | tr -d "\r")
+        curl -sf http://localhost:$PORT/ping || exit 1
+    '
+'''
+        }
+    }
+}
+    }
+}
