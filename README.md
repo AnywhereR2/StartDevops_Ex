@@ -68,14 +68,17 @@ Master_job
 Примеры API-запросов:
 
 root@node02ans:~# curl http://serverip:port/ping
+```
 {"status":"ok"}
-
+```
 
 root@node02ans:~# curl -X POST http://serverip:port/submit -H "Content-Type: application/json" -d '{"name": "Anton", "score": 50}'
+```
 {"message": "Saved"}
-
+```
 
 root@node02ans:~# curl -X GET http://serverip:port/results
+```
 {
  "results": [
    {
@@ -86,7 +89,7 @@ root@node02ans:~# curl -X GET http://serverip:port/results
    }
  ]
 }
-
+```
 
 ![10](attach/10.PNG)
 
