@@ -9,6 +9,7 @@
 6. Приложение будет доступно по заранее заданному вам порту.
 ![3](attach/3.PNG)
 
+---
 Как настроить Jenkins:
 1. Установить Jenkins на сервере и проверить доступность по адресу: http://IP:8080/
 2. В Jenkins установить следующие плагины:
@@ -27,6 +28,7 @@ credentials-binding
 3. Корне проекта есть директория: jenkins
 4. Необходимо создать папку и настроить в ней два pipeline. Название папки - Folder name: ExamWeb
 5. Название pipeline: 01_CI и 02_CD
+![4](attach/4.PNG)
 6. В корне Item - создать еще 1 pipeline который - объединяет в себе 01_CI и 02_CD. Название - Master_job
 7. Настроить ключи и креденшелы в Jenkins:
 ckerhub-creds
@@ -37,7 +39,7 @@ Secret file .env (envfile)
 
 8. Запустить Master_job
 
-
+---
 Как работает CI/CD:
 
 
@@ -65,7 +67,8 @@ Health Check - Проверка  на /ping
 
 Master_job
 Запуск pipeline 01_CI потом 02_CD
-
+---
+Примеры API-запросов:
 
 root@node02ans:~# curl http://serverip:port/ping
 {"status":"ok"}
@@ -86,8 +89,10 @@ root@node02ans:~# curl -X GET http://serverip:port/results
    }
  ]
 }
-
+![10](attach/10.PNG)
+---
 
 Скриншоты Jenkins Pipeline:
-
-
+![11](attach/11.PNG)
+![12](attach/12.PNG)
+![13](attach/13.PNG)
