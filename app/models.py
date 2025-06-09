@@ -39,7 +39,6 @@ def fetch_all_results():
         with conn.cursor() as cur:
             cur.execute("SELECT id, name, score, timestamp FROM results ORDER BY timestamp DESC")
             return cur.fetchall()
-        
 
 
 def init_db():
