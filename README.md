@@ -1,5 +1,6 @@
 Как запустить проект локально:
 1. Клонировать проект с GitHub -  git clone https://github.com/AnywhereR2/StartDevops_Ex.git flask-api
+![1](attach/1.png)
 2. Перейти в папку flask-api и изменить название файла .env.example на .env
 3. Поменять на свои значения данные в .env и удалить image_name из .env
 4. Удалить строку image: ${IMAGE_NAME} из docker-compose.yaml
